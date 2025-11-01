@@ -1,0 +1,43 @@
+# Motor calibration data for SO-101 robot
+# Auto-generated from LeRobot calibration tool
+# Robot ID: my_awesome_follower_arm
+# Source: /home/nick-bell/.cache/huggingface/lerobot/calibration/robots/so101_follower/my_awesome_follower_arm.json
+#
+# To recalibrate, run: ~/le_ws/calibrate_and_install.sh
+
+shoulder_pan:
+  id: 1
+  drive_mode: 0
+  homing_offset: 427
+  range_min: 792
+  range_max: 3251
+shoulder_lift:
+  id: 2
+  drive_mode: 0
+  homing_offset: 667
+  range_min: 824
+  range_max: 3202
+elbow_flex:
+  id: 3
+  drive_mode: 0
+  homing_offset: -826
+  range_min: 944
+  range_max: 3148
+wrist_flex:
+  id: 4
+  drive_mode: 0
+  homing_offset: 543
+  range_min: 820
+  range_max: 3112
+wrist_roll:
+  id: 5
+  drive_mode: 0
+  homing_offset: -493
+  range_min: 0
+  range_max: 4094
+gripper:
+  id: 6
+  drive_mode: 0
+  homing_offset: -1061
+  range_min: 2034
+  range_max: 3524
