@@ -5,9 +5,8 @@ ROS 2 packages for controlling the SO-ARM101 robotic arm with ros2_control and M
 ## Packages
 
 - **so101_hardware**: C++ hardware interface plugin for Feetech STS3215 servos
-- **so101_moveit**: MoveIt 2 configuration for motion planning
+- **so101_moveit**: MoveIt 2 configuration for motion planning and keyboard teleoperation
 - **so101_description**: URDF robot description
-- **lerobot_teleoperator_devices**: Keyboard and gamepad teleoperation devices
 
 ## Quick Start
 
@@ -96,15 +95,39 @@ ros2 topic hz /joint_states
 - Velocity and acceleration limits configured
 - Full RViz visualization
 
-### Teleoperation (lerobot_teleoperator_devices)
-Keyboard control for joint positions:
-- Q/A - Joint 1 (shoulder pan)
-- W/S - Joint 2 (shoulder lift)
-- E/D - Joint 3 (elbow flex)
-- R/F - Joint 4 (wrist flex)
-- T/G - Joint 5 (wrist roll)
-- O/L - Gripper (close/open)
+### Keyboard Teleoperation
+Simple keyboard control for joint positions:
+
+```bash
+# Terminal 1: Launch hardware interface
+source install/setup.bash
+ros2 launch so101_moveit demo.launch.py port:=/dev/ttyACM1
+
+# Terminal 2: Run keyboard teleoperation
+source install/setup.bash
+python3 src/lerobot-ros/so101_moveit/scripts/keyboard_teleop.py
+```
+
+**Controls:**
+- Q/A - Joint 1 (shoulder pan) - decrease/increase
+- W/S - Joint 2 (shoulder lift) - decrease/increase
+- E/D - Joint 3 (elbow flex) - decrease/increase
+- R/F - Joint 4 (wrist flex) - decrease/increase
+- T/G - Joint 5 (wrist roll) - decrease/increase
+- O/L - Gripper - close/open
 - ESC - Exit
+
+**Features:**
+- **Multi-key support** - Hold multiple keys simultaneously for combined motion
+- **Fast and responsive** - 30 Hz update rate for smooth control
+- **Accumulator pattern** - Target positions accumulate for continuous movement
+- **Joint limit enforcement** - Automatically clamps movements to URDF limits
+- **Real-time position display** - Shows commanded joint positions in terminal
+- **Separate gripper control** - Uses GripperActionController (different move group)
+- **No terminal echo** - Clean output without key character spam
+- **Proper ROS 2 node** - Uses standard ROS 2 patterns
+- Step size: 0.04 rad (~2.3 degrees) for arm, 0.10 rad for gripper
+- Trajectory duration: 0.15 seconds for smooth motion
 
 ## Architecture
 
@@ -250,13 +273,12 @@ lerobot-ros/
 │   ├── scservo_sdk/             # Feetech servo C++ SDK
 │   └── CMakeLists.txt           # Build configuration
 ├── so101_moveit/                # MoveIt 2 configuration
-│   ├── config/                  # Controllers, limits, calibration
+│   ├── config/                  # Controllers, limits, calibration, RViz
 │   ├── launch/                  # Launch files
+│   ├── scripts/                 # Keyboard teleoperation
 │   └── urdf/                    # Robot URDF with ros2_control
-├── so101_description/           # Robot URDF description
-│   └── urdf/                    # URDF/Xacro files
-└── lerobot_teleoperator_devices/  # Keyboard/gamepad control
-    └── lerobot_teleoperator_devices/  # Python package
+└── so101_description/           # Robot URDF description
+    └── urdf/                    # URDF/Xacro files
 ```
 
 ### Dependencies
@@ -268,9 +290,12 @@ lerobot-ros/
 - `rclcpp_lifecycle`
 - SCServo SDK (included in `scservo_sdk/`)
 
-**Python (optional teleoperation):**
-- `lerobot` (HuggingFace LeRobot framework)
-- `feetech-servo-sdk` (for direct hardware control)
+**Python (keyboard teleoperation):**
+- `pynput` - Keyboard input library
+
+```bash
+pip3 install pynput
+```
 
 ## Resources
 
