@@ -89,14 +89,6 @@ def generate_launch_description():
         ],
     )
 
-    # Static TF
-    static_tf_node = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        name="static_transform_publisher",
-        output="log",
-        arguments=["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "world", "base"],
-    )
 
     # Publish TF
     robot_state_publisher = Node(
@@ -138,7 +130,6 @@ def generate_launch_description():
     return LaunchDescription(
         declared_arguments
         + [
-            static_tf_node,
             robot_state_publisher,
             ros2_control_node,
             run_move_group_node,
