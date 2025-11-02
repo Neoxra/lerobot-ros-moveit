@@ -32,7 +32,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "calibration_file",
             default_value=default_calibration_file,
-            description="Path to motor calibration YAML file (default: package's motor_calibration.yaml).",
+            description="Path to motor calibration YAML file (default: motor_calibration.yaml).",
         )
     )
 
@@ -41,21 +41,15 @@ def generate_launch_description():
     port = LaunchConfiguration("port")
     calibration_file = LaunchConfiguration("calibration_file")
 
-    # Get URDF via xacro
-    robot_description_content = {
-        "robot_description": {
-            "use_fake_hardware": use_fake_hardware,
-            "port": port,
-        }
-    }
-
     moveit_config = (
         MoveItConfigsBuilder("so101_new_calib", package_name="so101_moveit")
-        .robot_description(mappings={
-            "use_fake_hardware": use_fake_hardware,
-            "port": port,
-            "calibration_file": calibration_file
-        })
+        .robot_description(
+            mappings={
+                "use_fake_hardware": use_fake_hardware,
+                "port": port,
+                "calibration_file": calibration_file,
+            }
+        )
         .to_moveit_configs()
     )
 
@@ -88,7 +82,6 @@ def generate_launch_description():
             moveit_config.joint_limits,
         ],
     )
-
 
     # Publish TF
     robot_state_publisher = Node(
